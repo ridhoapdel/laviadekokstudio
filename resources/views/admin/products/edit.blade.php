@@ -41,6 +41,25 @@
                     <input type="file" name="image" class="form-control">
                     <small class="text-muted">Kosongkan jika tidak ingin mengubah gambar.</small>
                 </div>
+                <div class="mb-4">
+                    <label class="form-label fw-bold">Current Image</label><br>
+                    @php
+                        $isUrl = \Illuminate\Support\Str::startsWith($product->image, 'http');
+                        $src = $isUrl ? $product->image : asset('storage/'.$product->image);
+                    @endphp
+                    <img src="{{ $src }}" width="100" class="mb-2 rounded border">
+                    
+                    <div class="row mt-2">
+                        <div class="col-md-6">
+                            <label class="small text-muted">Ganti dengan Upload File</label>
+                            <input type="file" name="image" class="form-control">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="small text-muted">ATAU Ganti dengan URL</label>
+                            <input type="url" name="image_url" class="form-control" placeholder="https://..." value="{{ $isUrl ? $product->image : '' }}">
+                        </div>
+                    </div>
+                </div>
                 <button class="btn btn-warning w-100">Update Product</button>
             </form>
         </div>

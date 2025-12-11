@@ -13,26 +13,29 @@ class DatabaseSeeder extends Seeder
 {
     public function run()
     {
-        // 1. Bikin Akun ADMIN
-        User::create([
-            'name' => 'Admin Laviade',
-            'email' => 'admin@laviade.com',
-            'password' => Hash::make('password'), // Passwordnya: password
-            'role' => 'admin',
-        ]);
+        // 1. Bikin Akun ADMIN (updateOrCreate agar tidak error jika sudah ada)
+        User::updateOrCreate(
+            ['email' => 'admin@laviade.com'],
+            [
+                'name' => 'Admin Laviade',
+                'password' => Hash::make('password'),
+                'role' => 'admin',
+            ]
+        );
 
-        // 2. Bikin Akun USER Biasa
-        User::create([
-            'name' => 'Joseph User',
-            'email' => 'user@laviade.com',
-            'password' => Hash::make('password'), // Passwordnya: password
-            'role' => 'user',
-        ]);
+        User::updateOrCreate(
+            ['email' => 'admin@laviade.studio'],
+            [
+                'name' => 'Alvito Alviade',
+                'password' => Hash::make('password123'),
+                'role' => 'admin',
+            ]
+        );
 
         // 3. Bikin Kategori
-        $catTops = Category::create(['name' => 'Tops']);
-        $catBottoms = Category::create(['name' => 'Bottoms']);
-        $catOuter = Category::create(['name' => 'Outerwear']);
+        $catTops = Category::firstOrCreate(['name' => 'Tops']);
+        $catBottoms = Category::firstOrCreate(['name' => 'Bottoms']);
+        $catOuter = Category::firstOrCreate(['name' => 'Outerwear']);
 
         // 4. Bikin Produk Dummy
         // Produk 1 (Tops)

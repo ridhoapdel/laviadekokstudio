@@ -32,8 +32,15 @@
                         @forelse($products as $product)
                         <tr>
                             <td class="ps-4">
-                                <img src="{{ asset('storage/' . $product->image) }}" 
-                                     class="rounded border" width="50" height="50" style="object-fit: cover;">
+                                @php
+                                    // Cek apakah string gambar dimulai dengan 'http' (berarti URL)
+                                    $isUrl = \Illuminate\Support\Str::startsWith($product->image, 'http');
+                                    $imageSrc = $isUrl ? $product->image : asset('storage/' . $product->image);
+                                @endphp
+                                
+                                <img src="{{ $imageSrc }}" 
+                                     class="rounded border" width="50" height="50" style="object-fit: cover;"
+                                     onerror="this.onerror=null; this.src='https://placehold.co/50'">
                             </td>
                             <td>
                                 <span class="fw-bold">{{ $product->name }}</span>
