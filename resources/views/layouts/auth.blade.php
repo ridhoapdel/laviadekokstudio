@@ -14,7 +14,6 @@
         body { 
             font-family: 'Inter', sans-serif; 
             background-color: #f8f9fa;
-            /* Padding top biar konten gak ketutup navbar fixed */
             padding-top: 80px; 
             min-height: 100vh;
             display: flex;
@@ -23,10 +22,8 @@
 
         /* --- NAVBAR STYLE --- */
         .navbar-brand { font-weight: 800; letter-spacing: -0.5px; font-size: 1.5rem; }
-        .nav-link { font-weight: 500; color: #333; }
-        .nav-link:hover { color: #000; font-weight: 600; }
-        
-        /* --- FOOTER STYLE --- */
+        .nav-link { font-weight: 500; color: #333; transition: all 0.2s; }
+        .nav-link:hover { color: #000; transform: translateY(-1px); }
         .footer { margin-top: auto; background: #000; color: #fff; padding: 40px 0; }
 
         /* --- AUTH PAGE STYLE (INI YANG KEMARIN HILANG) --- */
@@ -46,13 +43,36 @@
         }
         .btn-black { background-color: #000; color: #fff; width: 100%; border: none; }
         .btn-black:hover { background-color: #333; color: #fff; }
+
+        /* --- SEARCH BAR STYLE --- */
+        .navbar-search .form-control {
+            border-radius: 20px;
+            padding-left: 20px;
+            padding-right: 40px;
+            border: 1px solid #ddd;
+            background-color: #f1f1f1;
+        }
+        .navbar-search .form-control:focus {
+            background-color: #fff;
+            border-color: #000;
+            box-shadow: none;
+        }
+        .navbar-search .btn-search {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            border: none;
+            background: none;
+            color: #666;
+        }
     </style>
 </head>
 <body>
 
     <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm fixed-top">
         <div class="container">
-            <a class="navbar-brand" href="{{ Auth::check() && Auth::user()->role === 'admin' ? route('admin.dashboard') : route('home') }}">
+            <a class="navbar-brand me-4" href="{{ Auth::check() && Auth::user()->role === 'admin' ? route('admin.dashboard') : route('home') }}">
                 {{ Auth::check() && Auth::user()->role === 'admin' ? 'LAVIADMIN.' : 'LAVIADE.' }}
             </a>
             
@@ -61,7 +81,7 @@
             </button>
             
             <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav me-auto">
+                <ul class="navbar-nav me-3">
                     @auth
                         @if(Auth::user()->role === 'admin')
                             <li class="nav-item"><a class="nav-link" href="{{ route('admin.dashboard') }}">Dashboard</a></li>
@@ -80,6 +100,15 @@
                         <li class="nav-item"><a class="nav-link" href="{{ route('products.index') }}">Catalog</a></li>
                     @endauth
                 </ul>
+
+                @if(!Auth::check() || (Auth::check() && Auth::user()->role === 'user'))
+                <form action="{{ route('products.index') }}" method="GET" class="navbar-search mx-auto d-none d-lg-block position-relative" style="width: 350px;">
+                    <input type="text" name="search" class="form-control" placeholder="Cari baju, celana..." value="{{ request('search') }}">
+                    <button type="submit" class="btn-search"><i class="bi bi-search"></i></button>
+                </form>
+                @else
+                <div class="mx-auto"></div>
+                @endif
 
                 <ul class="navbar-nav ms-auto align-items-center">
                     @auth
@@ -119,17 +148,10 @@
 
     <div class="container mb-5">
         @if(session('success'))
-            <div class="alert alert-success alert-dismissible fade show mt-3 border-0 shadow-sm" role="alert">
-                {{ session('success') }}
-                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-            </div>
+            <div class="alert alert-success alert-dismissible fade show mt-3 shadow-sm border-0">{{ session('success') }}<button type="button" class="btn-close" data-bs-dismiss="alert"></button></div>
         @endif
-
         @if(session('error'))
-            <div class="alert alert-danger alert-dismissible fade show mt-3 border-0 shadow-sm" role="alert">
-                {{ session('error') }}
-                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-            </div>
+            <div class="alert alert-danger alert-dismissible fade show mt-3 shadow-sm border-0">{{ session('error') }}<button type="button" class="btn-close" data-bs-dismiss="alert"></button></div>
         @endif
 
         @yield('content')
