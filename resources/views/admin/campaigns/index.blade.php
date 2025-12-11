@@ -26,7 +26,7 @@
                     <tr>
                         <td class="ps-4">
                             <img src="{{ asset('storage/' . $campaign->banner_path) }}" 
-                                 class="rounded" width="100" style="object-fit: cover;">
+                                 class="rounded border" width="100" height="50" style="object-fit: cover;">
                         </td>
                         <td class="fw-bold">{{ $campaign->title }}</td>
                         <td class="small text-muted">
@@ -41,6 +41,8 @@
                             @endif
                         </td>
                         <td class="text-end pe-4">
+                            <a href="{{ route('admin.campaigns.edit', $campaign->id) }}" class="btn btn-sm btn-warning me-1">Edit</a>
+                            
                             <form action="{{ route('admin.campaigns.destroy', $campaign->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Hapus promo ini?')">
                                 @csrf @method('DELETE')
                                 <button class="btn btn-sm btn-danger">Delete</button>
