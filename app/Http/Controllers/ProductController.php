@@ -7,7 +7,13 @@ use Illuminate\Http\Request;
 
 class ProductController extends Controller
 {
+
+    // Alur search dimulai dari user mengirimkan keyword melalui parameter URL search.
+        // Parameter tersebut ditangkap oleh Request $request di controller.
+        // Jika parameter search ada dan tidak kosong, maka controller menambahkan kondisi WHERE ke query produk untuk mencari data berdasarkan kolom name atau description menggunakan operator LIKE.
+        
     // Halaman Katalog (Include Pencarian & Sorting)
+    
     public function index(Request $request)
     {
         $query = Product::query();
